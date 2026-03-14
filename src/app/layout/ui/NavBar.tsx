@@ -16,7 +16,7 @@ export default function NavBar() {
           end
           className={({ isActive }) => `${linkBase} ${isActive ? active : ""}`}
         >
-          Characters
+          Todo
         </NavLink>
         <NavLink
           to={ROUTES.FAVORITES}

@@ -1,37 +1,26 @@
-import type { ChangeEvent, ReactNode } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
 import type { Todos } from "../model/types";
-import { createStrictContext } from "@/shared/helper/createStrictContext";
-import { useStrictContext } from "@/shared/lib/hooks/useStrictContext";
-import type { TodoService } from "../services/TodoService";
-import { useTodos } from "./useTodos";
-import { usePropsGroup } from "@/shared/lib/hooks/usePropsGroup";
+import { createTodosStore } from "./store/createTodosStore";
+import { TodosStoreCtx } from "./store/useTodosStore";
 
-type TodosContextValue = {
-  todos: Todos | undefined;
-  setTodo: (value: Todos) => void;
-  value: string;
-  isLoading: boolean;
-  isError: boolean;
-  onClickToogleIsFavorite: (id: number) => void;
-  onClickToogleIsCompleted: (id: number) => void;
-  onChangeWriteValueHandler: (e: ChangeEvent<HTMLInputElement, Element>) => void;
-  onClickAddTodoHandler: (title: string) => void;
+type TodosStoreDeps = {
+  todoService: {
+    getTodo: (userId: string) => Promise<Todos>;
+    toogleFavoriteTodos: (id: number) => Promise<Todos>;
+    toogleDoneTodos: (id: number) => Promise<Todos>;
+  };
 };
-
-const TodosCtx = createStrictContext<TodosContextValue>();
-export const useTodosCtx = () => useStrictContext(TodosCtx);
-
-type TodosProviderDeps = {
-  todoService: TodoService;
-};
-
-export const createTodosProvider = ({ todoService }: TodosProviderDeps) => {
+export const createTodosProvider = ({ todoService }: TodosStoreDeps) => {
   const TodosProvider = ({ children }: { children: ReactNode }) => {
-    const todosValue = useTodos(todoService);
+    const store = useMemo(() => createTodosStore({ todoService }), []);
 
-    const value = usePropsGroup(todosValue);
+    useEffect(() => {
+      store.getState().actions.fetchTodos("2");
+    }, []);
 
-    return <TodosCtx.Provider value={value}>{children}</TodosCtx.Provider>;
+    return (
+      <TodosStoreCtx.Provider value={store}>{children}</TodosStoreCtx.Provider>
+    );
   };
 
   return TodosProvider;

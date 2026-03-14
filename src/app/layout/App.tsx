@@ -1,5 +1,5 @@
 import { RouterProvider } from "react-router-dom";
-import { setupApp } from "./compositionRoot/setupApp";
+import { setupApp } from "../compositionRoot/setupApp";
 
 const router = setupApp();
 

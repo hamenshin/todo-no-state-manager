@@ -10,18 +10,18 @@ export class FavoriteTodoStorage implements FavoriteTodoRepository {
     this.setInitFavorite();
   }
 
-  getFavoriteIds() {
+  async getFavoriteIds() {
     return this.storage.get(this.KEY_FAVORITE);
   }
 
-  toogleFavoriteTodos(id: number) {
+  async toogleFavoriteTodos(id: number) {
     const isFavorite = this.favorite.includes(id);
     if (isFavorite) {
       this.favorite = this.favorite.filter((favoriteId) => favoriteId !== id);
     } else {
       this.favorite = [...this.favorite, id];
     }
-    this.storage.set(this.KEY_FAVORITE, this.favorite);
+    await this.storage.set(this.KEY_FAVORITE, this.favorite);
   }
 
   private async setInitFavorite() {

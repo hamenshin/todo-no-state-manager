@@ -14,7 +14,7 @@ export class DoneTodoStorage implements DoneTodoRepository {
     return this.storage.get(this.KEY_FAVORITE);
   }
 
-  toogleCompletedTodos(id: number) {
+  async toogleCompletedTodos(id: number) {
     const isDone = this.completed.includes(id);
     if (isDone) {
       this.completed = this.completed.filter((completedId) => completedId !== id);

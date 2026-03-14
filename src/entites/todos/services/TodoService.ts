@@ -5,35 +5,38 @@ import type { TodoRepository } from "../repository/types";
 
 export class TodoService {
   constructor(
-    private characterRepo: TodoRepository,
+    private todoRepo: TodoRepository,
     private favoriteRepo: FavoriteTodoStorage,
     private doneRepo: DoneTodoStorage,
     private modelRepo: TodoModel,
   ) {}
 
   getTodo = async (userId: string) => {
-    
     const [{ data }, favoriteTodos, doneTodos] = await Promise.all([
-      this.characterRepo.getTodo({
+      this.todoRepo.getTodo({
         options: { params: { userId } },
       }),
       this.favoriteRepo.getFavoriteIds(),
       this.doneRepo.getCompletedIds(),
     ]);
-    
-    const todos = this.modelRepo.syncTodos(TodoModel.mapDTOtoTodos(data), favoriteTodos, doneTodos);
+
+    const todos = this.modelRepo.syncTodos(
+      TodoModel.mapDTOtoTodos(data),
+      favoriteTodos,
+      doneTodos,
+    );
 
     return todos;
   };
 
-  toogleFavoriteTodos = (id: number) => {
-    this.favoriteRepo.toogleFavoriteTodos(id);
+  toogleFavoriteTodos = async (id: number) => {
+    await this.favoriteRepo.toogleFavoriteTodos(id);
 
     return this.modelRepo.toogleTodosIsFavorite(id);
   };
 
-  toogleDoneTodos = (id: number) => {
-    this.doneRepo.toogleCompletedTodos(id);
+  toogleDoneTodos = async (id: number) => {
+    await this.doneRepo.toogleCompletedTodos(id);
 
     return this.modelRepo.toogleTodosIsCompleted(id);
   };

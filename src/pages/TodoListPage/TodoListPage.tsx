@@ -1,4 +1,9 @@
-import { useTodosCtx } from "@/entites/todos/store/TodosProvider";
+import {
+  useTodoFlag,
+  useTodos,
+  useTodosActions,
+  useTodoValue,
+} from "@/entites/todos/store/store/todosSelectors";
 import {
   TodoListFavoriteContext,
   type TodoListFavoriteContextValue,
@@ -6,17 +11,16 @@ import {
 import { TodoListFeature } from "@/features/TodoListFeature/TodoListFeature";
 
 export function TodoListPage() {
+  const todos = useTodos();
   const {
-    isError,
-    isLoading,
     onChangeWriteValueHandler,
     onClickAddTodoHandler,
     onClickToogleIsCompleted,
     onClickToogleIsFavorite,
-    setTodo,
-    todos,
-    value,
-  } = useTodosCtx();
+  } = useTodosActions();
+
+  const { isError, isLoading } = useTodoFlag();
+  const value = useTodoValue();
 
   const todoListFavoriteContextValue: TodoListFavoriteContextValue = {
     isError,
@@ -25,11 +29,9 @@ export function TodoListPage() {
     onClickAddTodoHandler,
     onClickToogleIsCompleted,
     onClickToogleIsFavorite,
-    setTodo,
     todos,
     value,
   };
-  
 
   return (
     <>
