@@ -1,4 +1,4 @@
-type TodoDTO = {
+export type Todos = {
   userId: number;
   id: number;
   title: string;
@@ -6,4 +6,3 @@ type TodoDTO = {
   isFavorite: boolean;
 };
 
-export type Todos = TodoDTO[];

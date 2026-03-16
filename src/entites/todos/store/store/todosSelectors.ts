@@ -1,17 +1,17 @@
-import { useTodosStore } from "./useTodosStore";
+import type { TodoStoreDeps } from "./createTodosStore";
 
-export const useTodos = () => {
-  return useTodosStore((state) => state.todos);
-};
+export const selectTodos = (s: TodoStoreDeps) => s.todos;
 
-export const useTodosActions = () => {
-  return useTodosStore((state) => state.actions);
-};
+export const selectTodosActions = (s: TodoStoreDeps) => s.actions;
 
-export const useTodoFlag = () => {
-  return useTodosStore((state) => state.flags)
-}
+export const selectTodoLodaing = (s: TodoStoreDeps) => s.flags.isLoading;
 
-export const useTodoValue = () => {
-  return  useTodosStore((state) => state.value)
-}
+export const selectTodoError = (s: TodoStoreDeps) => s.flags.isError;
+
+export const selectTodoValue = (s: TodoStoreDeps) => s.value;
+
+export const selectFavoriteTodo = (s: TodoStoreDeps) =>
+  s.todos.filter((todo) => todo.isFavorite);
+
+export const selectTodoById = (id: number) => (s: TodoStoreDeps) =>
+  s.todos.find((t) => t.id === id)!;

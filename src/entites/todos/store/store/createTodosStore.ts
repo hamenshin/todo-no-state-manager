@@ -1,9 +1,9 @@
 import type { ChangeEvent } from "react";
 import type { Todos } from "../../model/types";
-import { createStore } from "zustand";
+import { create } from "zustand";
 
 export type TodoStoreDeps = {
-  todos: Todos;
+  todos: Todos[];
   value: string;
   flags: {
     isLoading: boolean;
@@ -22,14 +22,14 @@ export type TodoStoreDeps = {
 
 type Deps = {
   todoService: {
-    getTodo: (userId: string) => Promise<Todos>;
-    toogleFavoriteTodos: (id: number) => Promise<Todos>;
-    toogleDoneTodos: (id: number) => Promise<Todos>;
+    getTodo: (userId: string) => Promise<Todos[]>;
+    toogleFavoriteTodos: (todos  : Todos[], id: number) => Promise<Todos[]>;
+    toogleDoneTodos: (todos : Todos[], id: number) => Promise<Todos[]>;
   };
 };
 
 export const createTodosStore = ({ todoService }: Deps) => {
-  return createStore<TodoStoreDeps>((set) => ({
+  const useStore = create<TodoStoreDeps>((set, get) => ({
     todos: [],
     flags: {
       isError: false,
@@ -55,11 +55,11 @@ export const createTodosStore = ({ todoService }: Deps) => {
         }
       },
       onClickToogleIsCompleted: async (id) => {
-        const todos = await todoService.toogleDoneTodos(id);
+        const todos = await todoService.toogleDoneTodos(get().todos, id);
         set({ todos });
       },
       onClickToogleIsFavorite: async (id) => {
-        const todos = await todoService.toogleFavoriteTodos(id);
+        const todos = await todoService.toogleFavoriteTodos(get().todos, id);
         set({ todos });
       },
       onChangeWriteValueHandler: (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,4 +83,8 @@ export const createTodosStore = ({ todoService }: Deps) => {
       },
     },
   }));
+
+  useStore.getState().actions.fetchTodos("2");
+
+  return useStore;
 };

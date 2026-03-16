@@ -1,41 +1,33 @@
 import {
-  useTodoFlag,
-  useTodos,
-  useTodosActions,
-  useTodoValue,
-} from "@/entites/todos/store/store/todosSelectors";
-import {
   TodoListFavoriteContext,
   type TodoListFavoriteContextValue,
 } from "@/features/TodoListFeature/di";
 import { TodoListFeature } from "@/features/TodoListFeature/TodoListFeature";
+import { getFeatureLocator } from "./useFeatureLocator";
+import {
+  selectTodoById,
+  selectTodoError,
+  selectTodoLodaing,
+  selectTodos,
+  selectTodosActions,
+  selectTodoValue,
+} from "@/entites/todos/store/store/todosSelectors";
+
+const useTodosStore = getFeatureLocator("TODOS_STORE");
 
 export function TodoListPage() {
-  const todos = useTodos();
-  const {
-    onChangeWriteValueHandler,
-    onClickAddTodoHandler,
-    onClickToogleIsCompleted,
-    onClickToogleIsFavorite,
-  } = useTodosActions();
-
-  const { isError, isLoading } = useTodoFlag();
-  const value = useTodoValue();
-
-  const todoListFavoriteContextValue: TodoListFavoriteContextValue = {
-    isError,
-    isLoading,
-    onChangeWriteValueHandler,
-    onClickAddTodoHandler,
-    onClickToogleIsCompleted,
-    onClickToogleIsFavorite,
-    todos,
-    value,
+  const deps: TodoListFavoriteContextValue = {
+    getTodoById: (id : number) => useTodosStore(selectTodoById(id)),
+    getTodo: () => useTodosStore(selectTodos),
+    getTodoActions: () => useTodosStore(selectTodosActions),
+    getTodoIsError: () => useTodosStore(selectTodoError),
+    getTodoIsLoading: () => useTodosStore(selectTodoLodaing),
+    getTodoValue: () => useTodosStore(selectTodoValue),
   };
 
   return (
     <>
-      <TodoListFavoriteContext.Provider value={todoListFavoriteContextValue}>
+      <TodoListFavoriteContext.Provider value={deps}>
         <TodoListFeature />
       </TodoListFavoriteContext.Provider>
     </>

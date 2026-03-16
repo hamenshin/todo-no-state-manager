@@ -1,4 +1,5 @@
 import { TodoModel } from "../model/TodoModel";
+import type { Todos } from "../model/types";
 import type { DoneTodoStorage } from "../repository/DoneTodoStorage";
 import type { FavoriteTodoStorage } from "../repository/FavoriteTodoStorage";
 import type { TodoRepository } from "../repository/types";
@@ -29,15 +30,15 @@ export class TodoService {
     return todos;
   };
 
-  toogleFavoriteTodos = async (id: number) => {
+  toogleFavoriteTodos = async (todos: Todos[], id: number) => {
     await this.favoriteRepo.toogleFavoriteTodos(id);
 
-    return this.modelRepo.toogleTodosIsFavorite(id);
+    return this.modelRepo.toogleTodosIsFavorite(todos, id);
   };
 
-  toogleDoneTodos = async (id: number) => {
+  toogleDoneTodos = async (todos: Todos[], id: number) => {
     await this.doneRepo.toogleCompletedTodos(id);
 
-    return this.modelRepo.toogleTodosIsCompleted(id);
+    return this.modelRepo.toogleTodosIsCompleted(todos, id );
   };
 }

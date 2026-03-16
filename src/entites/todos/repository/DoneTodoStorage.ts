@@ -17,11 +17,13 @@ export class DoneTodoStorage implements DoneTodoRepository {
   async toogleCompletedTodos(id: number) {
     const isDone = this.completed.includes(id);
     if (isDone) {
-      this.completed = this.completed.filter((completedId) => completedId !== id);
+      this.completed = this.completed.filter(
+        (completedId) => completedId !== id,
+      );
     } else {
       this.completed = [...this.completed, id];
     }
-    this.storage.set(this.KEY_FAVORITE, this.completed);
+    await this.storage.set(this.KEY_FAVORITE, this.completed);
   }
 
   private async setInitCompleted() {

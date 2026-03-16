@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom";
-import { setupApp } from "../compositionRoot/setupApp";
+import { setupRouter } from "./setupRouter";
 
-const router = setupApp();
+const router = setupRouter();
 
 export function App() {
   return <RouterProvider router={router} />;

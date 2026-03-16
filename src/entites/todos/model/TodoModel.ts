@@ -2,9 +2,8 @@ import type { TodosDTO } from "@/shared/dto/todoDto";
 import type { Todos } from "./types";
 
 export class TodoModel {
-  todos: Todos = [];
 
-  syncTodos = (todos: Todos, favoriteIds: number[], doneIds: number[]): Todos => {
+  syncTodos = (todos: Todos[], favoriteIds: number[], doneIds: number[]): Todos[] => {
     if (!todos) return [];
 
     const favoriteTodos = todos.map((todo) =>
@@ -13,27 +12,34 @@ export class TodoModel {
     const doneTodos = favoriteTodos.map((todo) =>
       doneIds.includes(todo.id) ? { ...todo, completed: true } : todo,
     );
-    this.todos = doneTodos;
 
-    return this.todos;
+    return doneTodos;
   };
 
-  toogleTodosIsCompleted = (id: number): Todos => {
-    this.todos = this.todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo,
-    );
-    return this.todos;
+  toogleTodosIsCompleted = (todos : Todos[], id: number): Todos[] => {
+    const idx = this.getTodoIndexById(todos, id);
+    const target = todos[idx];
+
+    todos[idx] = { ...target,  completed: !target.completed };
+
+    return todos;
   };
 
-  toogleTodosIsFavorite = (id: number): Todos => {
-    this.todos = this.todos.map((todo) =>
-      todo.id === id ? { ...todo, isFavorite: !todo.isFavorite } : todo,
-    );
-    return this.todos;
-  };
-  
+  toogleTodosIsFavorite = (todos : Todos[], id: number): Todos[] => {
+    const idx = this.getTodoIndexById(todos, id);
+    const target = todos[idx];
 
-  public static mapDTOtoTodos = (todosDTO: TodosDTO): Todos => {
+    todos[idx] = { ...target, isFavorite: !target.isFavorite };
+
+    return todos;
+  };
+
+  private getTodoIndexById(todos: Todos[], id: Todos["id"]) {
+    return todos.findIndex((c) => c.id === id);
+  }
+
+
+  public static mapDTOtoTodos = (todosDTO: TodosDTO): Todos[] => {
     return todosDTO.map((todo) => ({
       ...todo,
       isFavorite: false,
