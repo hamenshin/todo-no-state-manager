@@ -1,22 +1,10 @@
-import type { Todos } from "@/entites/todos/model/types";
+import type { TodoStoreDeps } from "@/entites/todos/store/store/createTodosStore";
 import { createStrictContext } from "@/shared/helper/createStrictContext";
 import { useStrictContext } from "@/shared/lib/hooks/useStrictContext";
-import type { ChangeEvent } from "react";
+import type { StoreApi } from "@/shared/zustand/createStore";
 
 export type TodoListFavoriteContextValue = {
-  getTodo: () => Todos[];
-  getTodoValue: () => string;
-  getTodoIsLoading: () => boolean;
-  getTodoIsError: () => boolean;
-  getTodoById: (id: number) => Todos;
-  getTodoActions: () => {
-    onClickToogleIsFavorite: ( id: number) => void;
-    onClickToogleIsCompleted: ( id: number) => void;
-    onChangeWriteValueHandler: (
-      e: ChangeEvent<HTMLInputElement, Element>,
-    ) => void;
-    onClickAddTodoHandler: (title: string) => void;
-  };
+  todosStore: StoreApi<TodoStoreDeps>;
 };
 
 export const TodoListFavoriteContext =

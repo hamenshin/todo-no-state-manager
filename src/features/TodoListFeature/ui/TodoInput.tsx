@@ -1,11 +1,16 @@
 import { Button } from "@/shared/ui/ui-kit/button";
 import { Input } from "@/shared/ui/ui-kit/input";
 import { useDi } from "../di";
+import {
+  selectTodosActions,
+  selectTodoValue,
+} from "@/entites/todos/store/store/todosSelectors";
 
 export const TodoInput = () => {
-  const { getTodoActions, getTodoValue } = useDi();
-  const { onClickAddTodoHandler, onChangeWriteValueHandler } = getTodoActions();
-  const value = getTodoValue();
+  const { todosStore } = useDi();
+  const { onClickAddTodoHandler, onChangeWriteValueHandler } =
+    todosStore.use(selectTodosActions);
+  const value = todosStore.use(selectTodoValue);
 
   return (
     <div className="flex item-center mb-2.5 gap-x-1.5">

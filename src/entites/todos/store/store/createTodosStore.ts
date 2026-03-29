@@ -1,6 +1,6 @@
 import type { ChangeEvent } from "react";
 import type { Todos } from "../../model/types";
-import { create } from "zustand";
+import { createStore } from "@/shared/zustand/createStore";
 
 export type TodoStoreDeps = {
   todos: Todos[];
@@ -23,13 +23,13 @@ export type TodoStoreDeps = {
 type Deps = {
   todoService: {
     getTodo: (userId: string) => Promise<Todos[]>;
-    toogleFavoriteTodos: (todos  : Todos[], id: number) => Promise<Todos[]>;
-    toogleDoneTodos: (todos : Todos[], id: number) => Promise<Todos[]>;
+    toogleFavoriteTodos: (todos: Todos[], id: number) => Promise<Todos[]>;
+    toogleDoneTodos: (todos: Todos[], id: number) => Promise<Todos[]>;
   };
 };
 
 export const createTodosStore = ({ todoService }: Deps) => {
-  const useStore = create<TodoStoreDeps>((set, get) => ({
+  const store = createStore<TodoStoreDeps>((set, get) => ({
     todos: [],
     flags: {
       isError: false,
@@ -84,7 +84,7 @@ export const createTodosStore = ({ todoService }: Deps) => {
     },
   }));
 
-  useStore.getState().actions.fetchTodos("2");
+  store.getState().actions.fetchTodos("2");
 
-  return useStore;
+  return store;
 };

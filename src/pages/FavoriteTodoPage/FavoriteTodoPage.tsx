@@ -6,13 +6,15 @@ import {
 } from "@/entites/todos/store/store/todosSelectors";
 import { useShallow } from "zustand/shallow";
 
-const useStore = getFeatureLocator("TODOS_STORE");
+const todoStore = getFeatureLocator("TODOS_STORE");
 
 export const FavoriteTodoPage = () => {
-  const favoroiteTodos = useStore(useShallow(selectFavoriteTodo));
+  const favoroiteTodos = todoStore.use(useShallow(selectFavoriteTodo));
   const { onClickToogleIsCompleted, onClickToogleIsFavorite } =
-    useStore(selectTodosActions);
-
+    todoStore.use(selectTodosActions);
+  
+  
+  
   return (
     <>
       <TodoCardList

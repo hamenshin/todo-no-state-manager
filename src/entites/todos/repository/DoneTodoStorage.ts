@@ -10,8 +10,8 @@ export class DoneTodoStorage implements DoneTodoRepository {
     this.setInitCompleted();
   }
 
-  getCompletedIds() {
-    return this.storage.get(this.KEY_FAVORITE);
+  async getCompletedIds() {
+    return await this.storage.get(this.KEY_FAVORITE);
   }
 
   async toogleCompletedTodos(id: number) {

@@ -1,10 +1,11 @@
 import { TodoInput } from "@/features/TodoListFeature/ui/TodoInput";
 import { useDi } from "./di";
 import { CatalogTodoList } from "./ui/CatalogTodoList";
+import { selectTodoLodaing } from "@/entites/todos/store/store/todosSelectors";
 
 export function TodoListFeature() {
-  const { getTodoIsLoading } = useDi();
-  const todoIsLoading = getTodoIsLoading();
+  const { todosStore } = useDi();
+  const todoIsLoading = todosStore.use(selectTodoLodaing);
 
   return (
     <>
